@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,16 +11,19 @@ use App\Models\JenisSoal;
 use App\Models\Level;
 use App\Models\Gambar;
 
-use DB;
-
 class SoalController extends Controller
 {
     // Soal Huruf
     public function showSoalHuruf()
     {
-        $data['soal'] = DB::table('soal')->where('id_jenis',1)->get();
+        // $data['soal'] = DB::table('soal')->where('id_jenis',1)->get();
         // $data['soal'] = DB::table('soal')->get();
-        $data['level'] = DB::table('level')->get();
+        // $data['level'] = DB::table('level')->get();
+
+        $data['soal'] = app('firebase.firestore')->database()->collection('Soal')->where('id_jenis', '=' , '1')->documents();
+        $data['level'] = app('firebase.firestore')->database()->collection('Level')->documents();
+
+        // ddd($data);
         return view('soal.soalhuruf', $data);
     }
 
@@ -31,14 +35,25 @@ class SoalController extends Controller
 
     public function storeSoalHuruf(Request $request)
     {
-        $newSoalHuruf = new Soal();
-        $newSoalHuruf->id_jenis = $request->id_jenis;
-        $newSoalHuruf->id_level = $request->id_level;
-        $newSoalHuruf->soal = $request->soal;
-        $newSoalHuruf->keterangan = $request->keterangan;
-        $newSoalHuruf->jawaban = $request->jawaban;
+        // $newSoalHuruf = new Soal();
+        // $newSoalHuruf->id_jenis = $request->id_jenis;
+        // $newSoalHuruf->id_level = $request->id_level;
+        // $newSoalHuruf->soal = $request->soal;
+        // $newSoalHuruf->keterangan = $request->keterangan;
+        // $newSoalHuruf->jawaban = $request->jawaban;
 
-        $status = $newSoalHuruf->save();
+        // $status = $newSoalHuruf->save();
+
+        $stuRef = app('firebase.firestore')->database()->collection('Soal')->newDocument();
+        $status = $stuRef->set([
+            'id_soal' => 1,
+            'id_jenis' => $request->id_jenis,
+            'id_level'    => $request->id_level,
+            'soal'    => $request->soal,
+            'keterangan'    => $request->keterangan,
+            'jawaban'    => $request->jawaban,
+          ]);
+        
         if($status)
         {
             return redirect('/soal_huruf'); // redirect ke /route nya
@@ -48,7 +63,8 @@ class SoalController extends Controller
     public function editSoalHuruf($id)
     {
         // return view('soal.editsoalhuruf');
-        $huruf = DB::table('soal')->where('id_soal',$id)->first();
+        // $huruf = DB::table('soal')->where('id_soal',$id)->first();
+        $huruf = app('firebase.firestore')->database()->collection('Soal')->document($id)->snapshot();
         return view('soal.editsoalhuruf', ['huruf' => $huruf]);
         // return view('soal.editsoalhuruf', compact($huruf);
         
@@ -56,8 +72,23 @@ class SoalController extends Controller
 
     public function postSoalHuruf(Request $request)
     {
-        $status = DB::table('soal')->where('id_soal', $request->id)
-                                ->update(['id_jenis'=>$request->id_jenis,'id_level'=>$request->id_level,'soal'=>$request->soal,'keterangan'=>$request->keterangan,'jawaban'=>$request->jawaban]);
+        // $status = DB::table('soal')->where('id_soal', $request->id)
+        //                         ->update(['id_jenis'=>$request->id_jenis,'id_level'=>$request->id_level,'soal'=>$request->soal,'keterangan'=>$request->keterangan,'jawaban'=>$request->jawaban]);
+
+        // ddd($request->id);
+
+        // ddd($request->id_jenis);
+        
+        $status = app('firebase.firestore')->database()->collection('Soal')->document($request->id)
+        ->update([
+            'id_jenis'=>$request->id_jenis,
+            'id_level'=>$request->id_level,
+            'soal'=>$request->soal,
+            'keterangan'=>$request->keterangan,
+            'jawaban'=>$request->jawaban
+        ]);
+        print($status);
+        
         if($status)
         {
             return redirect('/soal_huruf'); // redirect ke /route nya
@@ -72,21 +103,26 @@ class SoalController extends Controller
         // $data['soal'] = DB::table('soal')->find($id);
         // $data['soal'] = DB::table('soal')->where('id_soal', $id)->get();
         // return view('soal.viewsoalhuruf', $data);
-        $huruf = DB::table('soal')->where('id_soal',$id)->first();
+        // $huruf = DB::table('soal')->where('id_soal',$id)->first();
+        $huruf = app('firebase.firestore')->database()->collection('Soal')->document($id)->snapshot();
         return view('soal.viewsoalhuruf', ['huruf' => $huruf]);
     }
 
     public function deleteSoalHuruf(Request $request)
     {
-        DB::table('soal')->where('id_soal', $request->hapus)->delete();
+        // DB::table('soal')->where('id_soal', $request->hapus)->delete();
+        app('firebase.firestore')->database()->collection('Soal')->document($request->hapus)->delete();
         return redirect('/soal_huruf');
     }
 
     // Soal Angka
     public function showSoalAngka()
     {
-        $data['soal'] = DB::table('soal')->where('id_jenis',2)->get();
-        $data['level'] = DB::table('level')->get();
+        // $data['soal'] = DB::table('soal')->where('id_jenis',2)->get();
+        // $data['level'] = DB::table('level')->get();
+
+        $data['soal'] = app('firebase.firestore')->database()->collection('Soal')->where('id_jenis', '=' , '1')->documents();
+        $data['level'] = app('firebase.firestore')->database()->collection('Level')->documents();
         return view('soal.soalangka', $data);
     }
 
@@ -123,7 +159,8 @@ class SoalController extends Controller
     
     public function deleteSoalAngka(Request $request)
     {
-        DB::table('soal')->where('id_soal', $request->hapus)->delete();
+        // DB::table('soal')->where('id_soal', $request->hapus)->delete();
+        app('firebase.firestore')->database()->collection('Soal')->document($request->hapus)->delete();
         return redirect('/soal_angka');
     }
 

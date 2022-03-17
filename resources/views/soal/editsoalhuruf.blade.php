@@ -15,32 +15,32 @@
                     <label for="example-nf-email">Jenis Soal</label>
                     <div class="col-md-9" style="padding: 0px">
                         Soal Huruf
-                        <input type="hidden" class="form-control" name="id" value="{{$huruf->id_soal}}">
-                        <input type="hidden" class="form-control" name="id_jenis" value="{{$huruf->id_jenis}}">
+                        <input type="hidden" class="form-control" name="id" value="{{$huruf->id()}}">
+                        <input type="hidden" class="form-control" name="id_jenis" value="{{$huruf->data()['id_jenis']}}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="example-nf-email">Level</label>
                     <div class="col-md-9" style="padding: 0px">
-                        <input type="text" class="form-control" name="id_level" placeholder="" value="{{$huruf->id_level}}">
+                        <input type="text" class="form-control" name="id_level" placeholder="" value="{{$huruf->data()['id_level']}}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="example-nf-email">Isi Soal</label>
                     <div class="col-md-9" style="padding: 0px">
-                        <input type="text" class="form-control" name="soal" placeholder="" value="{{$huruf->soal}}">
+                        <input type="text" class="form-control" name="soal" placeholder="" value="{{$huruf->data()['soal']}}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="example-nf-email">Keterangan</label>
                     <div class="col-md-9" style="padding: 0px">
-                        <input type="text" class="form-control" name="keterangan" placeholder="" value="{{$huruf->keterangan}}">
+                        <input type="text" class="form-control" name="keterangan" placeholder="" value="{{$huruf->data()['keterangan']}}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="example-nf-email">Jawaban</label>
                     <div class="col-md-9" style="padding: 0px">
-                        <input type="text" class="form-control" name="jawaban" placeholder="" value="{{isset($huruf->jawaban) ? $huruf->jawaban : ''}}">
+                        <input type="text" class="form-control" name="jawaban" placeholder="" value="{{isset($huruf->data()['jawaban']) ? $huruf->data()['jawaban'] : ''}}">
                     </div>
                 </div>
                 

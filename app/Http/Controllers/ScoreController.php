@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Score;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class ScoreController extends Controller
 {
