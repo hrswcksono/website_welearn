@@ -27,32 +27,32 @@ label {
             </thead>
             <tbody>
             <?php $i=0; ?>
-            @foreach($soal as $key=>$soal) 
+            @foreach($soal as $soalidx) 
             <!-- for each itu spt if tapi ada kondisi, menampilkan 1 halaman berulang kali dengan nilai yang berbeda
             
             ada di soalcontroller  -->
                 <tr>
                     <td class="text-center">{{++$i}}</td>
-                    <td class="font-w600">{{$soal->soal}}</td>
-                    <td class="d-none d-sm-table-cell">{{$soal->keterangan}}</td>
+                    <td class="font-w600">{{$soalidx->data()['soal']}}</td>
+                    <td class="d-none d-sm-table-cell">{{$soalidx->data()['keterangan']}}</td>
                     <td class="d-none d-sm-table-cell">
-                        <span class="badge badge-danger">Level {{$soal->id_level}}</span>
+                        <span class="badge badge-danger">Level {{$soalidx->data()['id_level']}}</span>
                     </td>
                     <td class="text-center">
-                        <a href="{{url('view_soalangka/'.$soal->id_soal)}}">
+                        <a href="{{url('view_soalangka/'.$soalidx->id())}}">
                             <button type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="View Soal">
                                 <i class="fa fa-file-o"></i>
                             </button>
                         </a>
                         <!-- web.php -->
-                        <a href="{{url('/soal_angka/edit/'.$soal->id_soal)}}"> 
+                        <a href="{{url('/soal_angka/edit/'.$soalidx->id())}}"> 
                             <button type="button" class="btn btn-sm btn-success" data-toggle="tooltip" title="Edit Soal">
                                 <i class="fa fa-edit"></i>
                             </button>
                         </a>
                         <form action="{{ url('/hapus_soalangka')}}" method="post" enctype="multipart/form-data" style="display:inline-block">
                                 {{ csrf_field() }}
-                                <input type="hidden" name="hapus" value="{{ $soal->id_soal }}">
+                                <input type="hidden" name="hapus" value="{{ $soalidx->id() }}">
                                 <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                         </form>
                     </td>
@@ -100,8 +100,8 @@ label {
                         <label class="col-12" for="name">Level</label>
                         <div class="col-md-12">
                             <select class="form-control" name="id_level">
-                                @foreach($level as $key => $lvl)
-                                <option value="{{$lvl->id_level}}">{{$lvl->level_soal}}</option>
+                                @foreach($level as $lvl)
+                                <option value="{{$lvl->data()['level_soal']}}">{{$lvl->data()['level_soal']}}</option>
                                 @endforeach
                             </select>
                         </div>

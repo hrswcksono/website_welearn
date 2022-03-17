@@ -81,13 +81,13 @@ class SoalController extends Controller
         
         $status = app('firebase.firestore')->database()->collection('Soal')->document($request->id)
         ->update([
-            'id_jenis'=>$request->id_jenis,
-            'id_level'=>$request->id_level,
-            'soal'=>$request->soal,
-            'keterangan'=>$request->keterangan,
-            'jawaban'=>$request->jawaban
+            ['path' => 'id_jenis', 'value' => $request->id_jenis],
+            ['path' => 'id_level', 'value' => $request->id_level],
+            ['path' => 'soal', 'value' => $request->soal],
+            ['path' => 'keterangan', 'value' => $request->keterangan],
+            ['path' => 'jawaban', 'value' => $request->jawaban]
         ]);
-        print($status);
+        // print($status);
         
         if($status)
         {
@@ -121,21 +121,31 @@ class SoalController extends Controller
         // $data['soal'] = DB::table('soal')->where('id_jenis',2)->get();
         // $data['level'] = DB::table('level')->get();
 
-        $data['soal'] = app('firebase.firestore')->database()->collection('Soal')->where('id_jenis', '=' , '1')->documents();
+        $data['soal'] = app('firebase.firestore')->database()->collection('Soal')->where('id_jenis', '=' , '2')->documents();
         $data['level'] = app('firebase.firestore')->database()->collection('Level')->documents();
         return view('soal.soalangka', $data);
     }
 
     public function storeSoalAngka(Request $request)
     {
-        $newSoalAngka = new Soal();
-        $newSoalAngka->id_jenis = $request->id_jenis;
-        $newSoalAngka->id_level = $request->id_level;
-        $newSoalAngka->soal = $request->soal;
-        $newSoalAngka->keterangan = $request->keterangan;
-        $newSoalAngka->jawaban = $request->jawaban;
+        // $newSoalAngka = new Soal();
+        // $newSoalAngka->id_jenis = $request->id_jenis;
+        // $newSoalAngka->id_level = $request->id_level;
+        // $newSoalAngka->soal = $request->soal;
+        // $newSoalAngka->keterangan = $request->keterangan;
+        // $newSoalAngka->jawaban = $request->jawaban;
 
-        $status = $newSoalAngka->save();
+        $stuRef = app('firebase.firestore')->database()->collection('Soal')->newDocument();
+        $status = $stuRef->set([
+            'id_soal' => 1,
+            'id_jenis' => $request->id_jenis,
+            'id_level'    => $request->id_level,
+            'soal'    => $request->soal,
+            'keterangan'    => $request->keterangan,
+            'jawaban'    => $request->jawaban,
+          ]);
+
+        // $status = $newSoalAngka->save();
         if($status)
         {
             return redirect('/soal_angka'); // redirect ke /route nya
@@ -144,14 +154,16 @@ class SoalController extends Controller
 
     public function viewSoalAngka($id)
     {
-        $angka = DB::table('soal')->where('id_soal',$id)->first();
+        // $angka = DB::table('soal')->where('id_soal',$id)->first();
+        $angka = app('firebase.firestore')->database()->collection('Soal')->document($id)->snapshot();
         return view('soal.viewsoalangka', ['angka' => $angka]);
     }
 
     public function editSoalAngka($id)
     {
         // return view('soal.editsoalhuruf');
-        $angka = DB::table('soal')->where('id_soal',$id)->first();
+        // $angka = DB::table('soal')->where('id_soal',$id)->first();
+        $angka = app('firebase.firestore')->database()->collection('Soal')->document($id)->snapshot();
         return view('soal.editsoalangka', ['angka' => $angka]);
         // return view('soal.editsoalhuruf', compact($huruf);
         
@@ -166,14 +178,22 @@ class SoalController extends Controller
 
     public function postSoalAngka(Request $request)
     {
-        $status = DB::table('soal')->where('id_soal', $request->id)
-                                ->update(['id_jenis'=>$request->id_jenis,'id_level'=>$request->id_level,'soal'=>$request->soal,'keterangan'=>$request->keterangan,'jawaban'=>$request->jawaban]);
+        // $status = DB::table('soal')->where('id_soal', $request->id)
+        //                         ->update(['id_jenis'=>$request->id_jenis,'id_level'=>$request->id_level,'soal'=>$request->soal,'keterangan'=>$request->keterangan,'jawaban'=>$request->jawaban]);
+        
+        $status = app('firebase.firestore')->database()->collection('Soal')->document($request->id)
+        ->update([
+            ['path' => 'id_jenis', 'value' => $request->id_jenis],
+            ['path' => 'id_level', 'value' => $request->id_level],
+            ['path' => 'soal', 'value' => $request->soal],
+            ['path' => 'keterangan', 'value' => $request->keterangan],
+            ['path' => 'jawaban', 'value' => $request->jawaban]
+        ]);
+        
         if($status)
         {
             return redirect('/soal_angka'); // redirect ke /route nya
         }
     }
-
-    
 
 }
