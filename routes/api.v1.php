@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('login', 'App\Http\Controllers\API\V1\Globals\UserController@login');
 Route::post('register', 'App\Http\Controllers\API\V1\Globals\UserController@register');
+Route::post('menglogin', 'App\Http\Controllers\API\V1\Globals\UserController@menglogin');
 
 Route::group(['middleware' => 'auth:api'], function(){
 

@@ -8,6 +8,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SoalController;
 use App\Http\Controllers\ScoreController;
 use App\Http\Controllers\GambarController;
+use App\Http\Controllers\FirebaseController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,12 @@ use App\Http\Controllers\GambarController;
 // Route::get('/', function () {
 //     return view('login');
 // });
+
+Route::get('/signUp', [FirebaseController::class,'signUp']);
+Route::get('/signOut', [FirebaseController::class,'signOut']);
+Route::get('/signIn', [FirebaseController::class,'signIn']);
+Route::get('/getInfo', [FirebaseController::class,'getInfo']);
+Route::get('/userCheck', [FirebaseController::class,'userCheck']);
 
 Route::get('/', [LandingController::class,'index']);
 Auth::routes();

@@ -35,6 +35,12 @@ class GambarController extends Controller
             'gambar' => $nama_gambar,
         ]);
 
+        // $stuRef = app('firebase.firestore')->database()->collection('Gambar')->newDocument();
+        // $status = $stuRef->set([
+        //     'nama' => $request->nama,
+        //     'gambar' => $nama_gambar,
+        //   ]);
+
         return redirect()->back();
     }
 

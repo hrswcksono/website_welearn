@@ -8,7 +8,7 @@ use App\Models\Score;
 use FilesystemIterator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class GambarController extends Controller
 {
@@ -315,7 +315,6 @@ class GambarController extends Controller
         return response()->json(['success'=>config('global.http.200'), 'message'=>$text], 200);
 
     }
-
 
     public function getSoalAngka(string $level)
     {
